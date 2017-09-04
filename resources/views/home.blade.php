@@ -14,7 +14,18 @@
                             </div>
                         @endif
 
-                        Bem vindo
+                        <table>
+                            <tr>
+                                <th>Contextos</th>
+                            </tr>
+                            @foreach($contexto as $c)
+                                <tr>
+                                    <td>{{ $c->descricao }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+
+                            <a href="{{ url('/home') }}">Novo Contexto</a>
                     </div>
                 </div>
             </div>

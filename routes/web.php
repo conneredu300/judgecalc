@@ -17,4 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function(App\Contexto $contexto){
+    return view('home', ['contexto' => $contexto::all()]);
+})->name('home');
+
+Route::post('/create', 'ContextoController@Index');
