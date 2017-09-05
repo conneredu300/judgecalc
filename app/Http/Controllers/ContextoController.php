@@ -14,7 +14,7 @@ class ContextoController extends Controller
      */
     public function index()
     {
-        return view('contexto');
+
     }
 
     /**
@@ -24,7 +24,7 @@ class ContextoController extends Controller
      */
     public function create()
     {
-        //
+        return view('form-contexto');
     }
 
     /**
@@ -35,7 +35,13 @@ class ContextoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $contexto = new Contexto;
+
+        $contexto->descricao = $request->contextoDescricao;
+
+        $contexto->save();
+
+        return redirect()->route('home')->with('message','Contexto salvo com sucesso');
     }
 
     /**
@@ -80,6 +86,8 @@ class ContextoController extends Controller
      */
     public function destroy(Contexto $contexto)
     {
-        //
+        $contexto->delete();
+
+        return redirect()->route('home')->with('message','Registro apagado com sucesso');
     }
 }

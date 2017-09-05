@@ -21,4 +21,8 @@ Route::get('/home', function(App\Contexto $contexto){
     return view('home', ['contexto' => $contexto::all()]);
 })->name('home');
 
-Route::post('/create', 'ContextoController@Index');
+Route::get('/novo-registro', 'ContextoController@Create')->name('novo-contexto');
+
+Route::post('/inserir', 'ContextoController@Store')->name('salvar-contexto');
+
+Route::delete('/apagar/{id}', 'ContextoController@Destroy');

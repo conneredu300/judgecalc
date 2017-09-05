@@ -14,18 +14,26 @@
                             </div>
                         @endif
 
-                        <table>
-                            <tr>
-                                <th>Contextos</th>
-                            </tr>
-                            @foreach($contexto as $c)
+                        <form method="POST">
+                            {{ csrf_field() }}
+                            <table class="table">
+                                <thead>
                                 <tr>
-                                    <td>{{ $c->descricao }}</td>
+                                    <th>Contextos</th>
                                 </tr>
-                            @endforeach
-                        </table>
-
-                            <a href="{{ url('/home') }}">Novo Contexto</a>
+                                </thead>
+                                <tbody>
+                                @foreach($contexto as $c)
+                                    <tr>
+                                        <td>{{ $c->descricao }}</td>
+                                        <td><a href="{{ url('apagar') . '/' . $c->id }}"
+                                               class="btn btn-danger">Apagar</a></td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </form>
+                        <a href="{{ route('novo-contexto') }}">Novo Contexto</a>
                     </div>
                 </div>
             </div>
@@ -36,7 +44,7 @@
 @section('script')
     <script>
         $(document).ready(function () {
-            alert("ola mundo");
+
         });
     </script>
 @endsection
