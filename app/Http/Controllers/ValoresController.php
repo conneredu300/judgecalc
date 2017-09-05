@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Contexto;
 use Illuminate\Http\Request;
+use App\Valores;
 
-class ContextoController extends Controller
+class ValoresController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,9 @@ class ContextoController extends Controller
      */
     public function index()
     {
-        $contexto = Contexto::all();
+        $valores = Valores::all();
 
-        return view('contexto',['contexto' => $contexto]);
+        return view('valores',['valores' => $valores]);
     }
 
     /**
@@ -26,7 +26,7 @@ class ContextoController extends Controller
      */
     public function create()
     {
-        return view('form-contexto');
+        return view('form-valores');
     }
 
     /**
@@ -37,22 +37,16 @@ class ContextoController extends Controller
      */
     public function store(Request $request)
     {
-        $contexto = new Contexto;
 
-        $contexto->descricao = $request->contextoDescricao;
-
-        $contexto->save();
-
-        return redirect()->route('home')->with('message','Contexto salvo com sucesso');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Contexto  $contexto
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Contexto $contexto)
+    public function show($id)
     {
         //
     }
@@ -60,10 +54,10 @@ class ContextoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Contexto  $contexto
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Contexto $contexto)
+    public function edit($id)
     {
         //
     }
@@ -72,10 +66,10 @@ class ContextoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Contexto  $contexto
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contexto $contexto)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -83,13 +77,11 @@ class ContextoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Contexto  $contexto
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contexto $contexto)
+    public function destroy($id)
     {
-        $contexto->delete();
-
-        return redirect()->route('home')->with('message','Registro apagado com sucesso');
+        //
     }
 }

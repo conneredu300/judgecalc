@@ -13,28 +13,8 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-
-                        <form method="POST">
-                            {{ csrf_field() }}
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Contextos</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($contexto as $c)
-                                    <tr>
-                                        <td>{{ $c->descricao }}</td>
-                                        <td><a href="{{ url('apagar') . '/' . $c->id }}"
-                                               class="btn btn-danger">Apagar</a></td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </form>
-                        <a href="{{ route('novo-contexto') }}">Novo Contexto</a>
                     </div>
+
                 </div>
             </div>
         </div>

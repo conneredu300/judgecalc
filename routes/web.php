@@ -17,12 +17,17 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', function(App\Contexto $contexto){
-    return view('home', ['contexto' => $contexto::all()]);
-})->name('home');
+Route::get('/home', 'HomeController@Index')->name('home');
 
-Route::get('/novo-registro', 'ContextoController@Create')->name('novo-contexto');
+Route::get('/contextos', 'ContextoController@Index')->name('listar-contextos');
 
-Route::post('/inserir', 'ContextoController@Store')->name('salvar-contexto');
+Route::get('/novo-contexto', 'ContextoController@Create')->name('novo-contexto');
 
-Route::delete('/apagar/{id}', 'ContextoController@Destroy');
+Route::post('/inserir-contexto', 'ContextoController@Store')->name('salvar-contexto');
+
+
+Route::get('/valores', 'ValoresController@Index')->name('listar-valores');
+
+Route::get('/novo-valor', 'ValoresController@Create')->name('novo-valor');
+
+Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor');

@@ -13,12 +13,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    {{-- BOOTSTRAP --}}
     <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-
-
-    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -37,6 +33,14 @@
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
                         Inicio
+                    </a>
+
+                    <a class="navbar-brand" href="{{ route('listar-contextos') }}">
+                        Contextos
+                    </a>
+
+                    <a class="navbar-brand" href="{{ route('listar-valores') }}">
+                        Valores
                     </a>
                 </div>
 
@@ -77,7 +81,6 @@
                 </div>
             </div>
         </nav>
-
         @yield('content')
     </div>
 

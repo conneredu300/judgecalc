@@ -5,25 +5,28 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Listagem de Contextos</div>
+                    <div class="panel-heading">Listagem de valores</div>
 
                     <div class="panel-body">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Contextos</th>
+                                <th>Valor Líquido</th>
+                                <th>Multas</th>
+                                <th>Júros</th>
+                                <th>Contexto relacionado</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($contexto as $c)
+                            @foreach($valores as $valor)
                                 <tr>
-                                    <td>{{ $c->descricao }}</td>
+                                    <td>{{ $valor->contexto->descricao }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
 
-                        <a href="{{ route('novo-contexto') }}" class="btn btn-info">Novo Valor</a>
+                        <a href="{{ route('novo-valor') }}" class="btn btn-info">Novo Registro</a>
                     </div>
 
                 </div>
