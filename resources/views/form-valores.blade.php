@@ -8,6 +8,17 @@
                     <div class="panel-heading">Novo Valor</div>
 
                     <div class="panel-body">
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         {!! Form::open(['route' => 'salvar-valor', 'class' => 'form']) !!}
 
                         <div class="form-group">
@@ -15,7 +26,7 @@
                             <select class="form-control" id="valorContexto" name="valorContexto">
                                 <?php
                                     foreach($contextos as $key => $contexto){
-                                        echo "<option>$contexto</option>";
+                                        echo "<option value='$contexto->id'>$contexto->descricao</option>";
                                     }
                                 ?>
                             </select>

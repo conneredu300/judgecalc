@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Validation\Validator;
 use App\Valores;
 use App\Contexto;
+use Illuminate\Support\Facades\Validator;
 
 class ValoresController extends Controller
 {
@@ -18,7 +18,7 @@ class ValoresController extends Controller
     {
         $valores = Valores::all();
 
-        return view('valores',['valores' => $valores]);
+        return view('valores', ['valores' => $valores]);
     }
 
     /**
@@ -28,22 +28,35 @@ class ValoresController extends Controller
      */
     public function create()
     {
-        $contexto = (new Contexto())->retornaArrayDescricao();
+        $contexto = Contexto::all();
 
-        return view('form-valores',['contextos' => $contexto]);
+        return view('form-valores', ['contextos' => $contexto]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Valores $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'valor' => 'required|unique:posts|max:255',
+            'valorContexto' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('novo-valor')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $valores = new Valores();
 
         $valores->valor = $request->get('valor');
+
+        $valores->contextoId = $request->get('valorContexto');
 
         $valores->save();
 
@@ -56,7 +69,7 @@ class ValoresController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -67,7 +80,7 @@ class ValoresController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -78,8 +91,8 @@ class ValoresController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -90,16 +103,11 @@ class ValoresController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
-    }
-
-    protected function retornaValidacaoErros(Validator $validator)
-    {
-        return $validator->errors()->all();
     }
 }

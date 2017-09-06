@@ -23,7 +23,7 @@
                             </tbody>
                         </table>
 
-                        <a href="{{ route('novo-contexto') }}" class="btn btn-info">Novo Valor</a>
+                        <a href="{{ route('novo-contexto') }}" class="btn btn-info">Novo Registro</a>
                     </div>
 
                 </div>
