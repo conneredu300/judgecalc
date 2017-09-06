@@ -5,10 +5,21 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Novo Contexto</div>
+                    <div class="panel-heading">Novo Valor</div>
 
                     <div class="panel-body">
                         {!! Form::open(['route' => 'salvar-valor', 'class' => 'form']) !!}
+
+                        <div class="form-group">
+                            <label for="valorContexto">Example select</label>
+                            <select class="form-control" id="valorContexto" name="valorContexto">
+                                <?php
+                                    foreach($contextos as $key => $contexto){
+                                        echo "<option>$contexto</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
 
                         <div class="form-group">
                             {!! Form::label('valor', 'Valor') !!}

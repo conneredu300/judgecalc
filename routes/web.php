@@ -19,15 +19,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@Index')->name('home');
 
-Route::get('/contextos', 'ContextoController@Index')->name('listar-contextos');
+Route::get('/contextos', 'ContextoController@Index')->name('listar-contextos')->middleware('auth');
 
-Route::get('/novo-contexto', 'ContextoController@Create')->name('novo-contexto');
+Route::get('/novo-contexto', 'ContextoController@Create')->name('novo-contexto')->middleware('auth');
 
-Route::post('/inserir-contexto', 'ContextoController@Store')->name('salvar-contexto');
+Route::post('/inserir-contexto', 'ContextoController@Store')->name('salvar-contexto')->middleware('auth');
 
 
-Route::get('/valores', 'ValoresController@Index')->name('listar-valores');
+Route::get('/valores', 'ValoresController@Index')->name('listar-valores')->middleware('auth');
 
-Route::get('/novo-valor', 'ValoresController@Create')->name('novo-valor');
+Route::get('/novo-valor', 'ValoresController@Create')->name('novo-valor')->middleware('auth');
 
-Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor');
+Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor')->middleware('auth');

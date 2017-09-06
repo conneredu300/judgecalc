@@ -21,6 +21,9 @@ class RedirectIfAuthenticated
             return redirect('/home');
         }
 
+        $request->session()->flash('message.level', 'danger');
+        $request->session()->flash('message.content', 'Entre com seu usuário e senha');
+
         return $next($request);
     }
 }

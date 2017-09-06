@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\Validator;
 use App\Valores;
+use App\Contexto;
 
 class ValoresController extends Controller
 {
@@ -26,7 +28,9 @@ class ValoresController extends Controller
      */
     public function create()
     {
-        return view('form-valores');
+        $contexto = (new Contexto())->retornaArrayDescricao();
+
+        return view('form-valores',['contextos' => $contexto]);
     }
 
     /**
@@ -37,7 +41,16 @@ class ValoresController extends Controller
      */
     public function store(Request $request)
     {
+        $valores = new Valores();
 
+        $valores->valor = $request->get('valor');
+
+        $valores->save();
+
+        $request->session()->flash('message.level', 'danger');
+        $request->session()->flash('message.content', 'Entre com seu usuário e senha');
+
+        return redirect()->route('valores');
     }
 
     /**
@@ -83,5 +96,10 @@ class ValoresController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function retornaValidacaoErros(Validator $validator)
+    {
+        return $validator->errors()->all();
     }
 }

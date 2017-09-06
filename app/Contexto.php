@@ -10,4 +10,17 @@ class Contexto extends Model
     {
         return $this->hasMany('App\Valores');
     }
+
+    public function retornaArrayDescricao()
+    {
+        $contextos = Contexto::all();
+
+        $arrDescricao = array();
+
+        foreach($contextos as $contexto){
+            $arrDescricao[] = $contexto->descricao;
+        }
+
+        return $arrDescricao;
+    }
 }
