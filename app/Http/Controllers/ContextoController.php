@@ -39,6 +39,14 @@ class ContextoController extends Controller
     {
         $contexto = new Contexto;
 
+        $dados = $request->all();
+
+        $validator = validator($dados, $contexto->rules, $contexto->messages);
+
+        if($validator->fails()){
+            return redirect()->route('novo-contexto')->withErrors($validator);
+        }
+
         $contexto->descricao = $request->contextoDescricao;
 
         $contexto->save();
@@ -86,10 +94,17 @@ class ContextoController extends Controller
      * @param  \App\Contexto  $contexto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contexto $contexto)
+    public function destroy($id)
     {
-        $contexto->delete();
+        $contexto = (new Contexto())->find($id);
 
-        return redirect()->route('home')->with('message','Registro apagado com sucesso');
+        if ($contexto->delete()) {
+            return redirect()->route('listar-contextos')->with([
+                'message.level' => 'success',
+                'message.content' => "'$contexto->descricao' apagado com sucesso!",
+            ]);
+        }
+
+        return redirect()->route('listar-valores');
     }
 }

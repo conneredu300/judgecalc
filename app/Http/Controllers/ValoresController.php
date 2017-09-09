@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Valores;
 use App\Contexto;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Validation\Validator;
 
 class ValoresController extends Controller
 {
@@ -41,29 +41,27 @@ class ValoresController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'valor' => 'required|unique:posts|max:255',
-            'valorContexto' => 'required',
-        ]);
+        $valores = new Valores();
+
+        $dados = $request->all();
+
+        $validator = validator($dados, $valores->rules, $valores->messages);
 
         if ($validator->fails()) {
-            return redirect()->route('novo-valor')
-                ->withErrors($validator)
-                ->withInput();
+            return redirect()->route('novo-valor')->withErrors($validator)->withInput();
         }
-
-        $valores = new Valores();
 
         $valores->valor = $request->get('valor');
 
-        $valores->contextoId = $request->get('valorContexto');
+        $valores->contexto_id = $request->get('valorContexto');
+
+        $valores->multa = $request->get('multa');
+
+        $valores->juros = $request->get('juros');
 
         $valores->save();
 
-        $request->session()->flash('message.level', 'danger');
-        $request->session()->flash('message.content', 'Entre com seu usuário e senha');
-
-        return redirect()->route('valores');
+        return redirect()->route('listar-valores');
     }
 
     /**
@@ -92,7 +90,7 @@ class ValoresController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -108,6 +106,16 @@ class ValoresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $valor = (new Valores())->find($id);
+
+        if ($valor->delete()) {
+            return redirect()->route('listar-valores')->with([
+                'message.level' => 'success',
+                'message.content' => 'Apagado com sucesso!',
+            ]);
+        }
+
+        return redirect()->route('listar-valores');
     }
+
 }

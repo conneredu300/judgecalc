@@ -9,10 +9,15 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
+        <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+
+        <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+
+
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
+                background-color: rgba(243, 242, 244, 0.78);
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
@@ -61,6 +66,22 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .form-control{
+                display: block;
+                width: 100%;
+                padding: .5rem .75rem;
+                font-size: 1rem;
+                line-height: 1.25;
+                color: #2b2e35;
+                background-color: #fff;
+                background-image: none;
+                background-clip: padding-box;
+                border: 1px solid rgba(0,0,0,.15);
+                border-radius: .25rem;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                font-weight: 600;
+            }
         </style>
     </head>
     <body>
@@ -68,7 +89,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/home') }}">Painel de Controle</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
                         <a href="{{ route('register') }}">Registrar</a>
@@ -78,7 +99,19 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Calculadora
+                    Escolha um Contexto
+                    <select class="form-control" id="valorContexto" name="valorContexto">
+                        <?php
+                        foreach (\App\Contexto::all() as $key => $contexto) {
+                            echo "<option value='$contexto->id'><strong>$contexto->descricao</strong></option>";
+                        }
+                        ?>
+                    </select>
+
+                    <div class="form-group" id="valor" style="display: none">
+                        Valor
+                        <input type="text" class="form-control" id="pwd">
+                    </div>
                 </div>
 
                 <div class="links">
@@ -88,3 +121,10 @@
         </div>
     </body>
 </html>
+<script>
+    $(document).ready(function(){
+        $('#valorContexto').on('change',function(){
+             $('#valor').removeClass('hidden');
+        });
+    });
+</script>

@@ -8,16 +8,25 @@
                     <div class="panel-heading">Listagem de Contextos</div>
 
                     <div class="panel-body">
+                        @if(session()->has('message'))
+                            <div class="alert alert-{{ session('message.level') }}">
+                                {!! session('message.content') !!}
+                            </div>
+                        @endif
                         <table class="table">
                             <thead>
                             <tr>
                                 <th>Contextos</th>
+                                <th>Ações</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($contexto as $c)
                                 <tr>
                                     <td>{{ $c->descricao }}</td>
+                                    <td><a href="{{ route('apagar-contexto', $c->id) }}" class="btn btn-danger">
+                                            <strong>Excluir</strong>
+                                        </a></td>
                                 </tr>
                             @endforeach
                             </tbody>

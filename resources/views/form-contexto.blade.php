@@ -10,10 +10,17 @@
                     <div class="panel-body">
                         {!! Form::open(['route' => 'salvar-contexto', 'class' => 'form']) !!}
 
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('contextoDescricao')? ' has-error' : '' }}">
                             {!! Form::label('contextoDescricao', 'Descrição') !!}
                             <input type="text" class="form-control" id="contextoDescricao" name="contextoDescricao">
-                            <small id="emailHelp" class="form-text text-muted">Tipo de contexto</small>
+
+                            @if($errors->has('contextoDescricao'))
+                                <span class="help-block">
+                                <strong>{{ $errors->first('contextoDescricao') }}</strong>
+                                    </span>
+                            @else
+                                <small id="emailHelp" class="form-text text-muted">Tipo de contexto</small>
+                            @endif
                         </div>
 
                         <button class="btn btn-success" type="submit">enviar</button>

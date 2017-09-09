@@ -11,16 +11,11 @@ class Contexto extends Model
         return $this->hasMany('App\Valores');
     }
 
-    public function retornaArrayDescricao()
-    {
-        $contextos = Contexto::all();
+    public $rules = [
+        'contextoDescricao' => 'required'
+    ];
 
-        $arrDescricao = array();
-
-        foreach($contextos as $contexto){
-            $arrDescricao[] = $contexto->descricao;
-        }
-
-        return $arrDescricao;
-    }
+    public $messages = [
+        'contextoDescricao.required' => 'Campo "Descrição" é obrigatório'
+    ];
 }

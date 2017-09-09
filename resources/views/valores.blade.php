@@ -8,7 +8,7 @@
                     <div class="panel-heading">Listagem de valores</div>
 
                     <div class="panel-body">
-                        @if(session()->has('message.level'))
+                        @if(session()->has('message'))
                             <div class="alert alert-{{ session('message.level') }}">
                                 {!! session('message.content') !!}
                             </div>
@@ -20,14 +20,23 @@
                                 <th>Multas</th>
                                 <th>Júros</th>
                                 <th>Contexto relacionado</th>
+                                <th>Ações</th>
                             </tr>
                             </thead>
                             <tbody>
+                            {{ Form::hidden('_method', 'DELETE') }}
                             @foreach($valores as $valor)
                                 <tr>
+                                    <td>{{ $valor->valor }}</td>
+                                    <td>{{ $valor->multa }}</td>
+                                    <td>{{ $valor->juros }}</td>
                                     <td>{{ $valor->contexto->descricao }}</td>
+                                    <td><a href="{{ route('apagar-valor', $valor->id) }}" class="btn btn-danger">
+                                            <strong>Excluir</strong>
+                                        </a></td>
                                 </tr>
                             @endforeach
+                            {{ Form::close() }}
                             </tbody>
                         </table>
 

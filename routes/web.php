@@ -23,11 +23,15 @@ Route::get('/contextos', 'ContextoController@Index')->name('listar-contextos')->
 
 Route::get('/novo-contexto', 'ContextoController@Create')->name('novo-contexto')->middleware('auth');
 
+Route::get('/apagar-contexto/{id}', 'ContextoController@Destroy')->name('apagar-contexto')->middleware('auth');
+
 Route::post('/inserir-contexto', 'ContextoController@Store')->name('salvar-contexto')->middleware('auth');
 
 
 Route::get('/valores', 'ValoresController@Index')->name('listar-valores')->middleware('auth');
 
 Route::get('/novo-valor', 'ValoresController@Create')->name('novo-valor')->middleware('auth');
+
+Route::get('/apagar-valor/{id}', 'ValoresController@Destroy')->name('apagar-valor')->middleware('auth');
 
 Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor')->middleware('auth');
