@@ -14,6 +14,9 @@
     <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
 
 
+    <link href="{{ asset('select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
+    <script src="{{ asset('select2/js/select2.min.js') }}"></script>
+
     <!-- Styles -->
     <style>
         html, body {
@@ -118,13 +121,7 @@
                 }
                 ?>
             </select>
-            <select class="form-control" id="valorContexto" name="valorContexto">
-                <?php
-                foreach (\App\Valores::all() as $key => $valores) {
-                    echo "<option value='$valores->valor'><strong>$valores->valor</strong></option>";
-                }
-                ?>
-            </select>
+            <select class="form-control" id="valorContexto" name="valorContexto"></select>
         </form>
     </div>
 </div>
@@ -141,7 +138,9 @@
                 dataType: 'json',
                 data: {id: id},
                 success: function(data){
-                    debugger
+                    for(var row in data){
+
+                    }
                 }
             });
         });
