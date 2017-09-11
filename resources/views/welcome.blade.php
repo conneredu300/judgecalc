@@ -26,6 +26,7 @@
             font-weight: 100;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         .full-height {
@@ -115,13 +116,22 @@
                 @endauth
         </div>
     @endif
-
-    <div class="content">
-        <input type="hidden" id="multaContexto">
-        <input type="hidden" id="jurosContexto">
-
+    <div class="content" style="margin-top: 8%">
         <div class="title m-b-md">
-            Resultado: <p class="form-static valorFinal">0,00</p>
+            <label for="valorFinal" class="text-muted"></label>
+            Total: <span class="valorFinal" id="valorFinal" style="color: red;">0,00</span>
+        </div>
+    </div>
+    <div class="row col-sm-2">
+        <div class="col-sm-6">
+            <label for="juros" class="text-muted">Júros: </label>
+
+            <p class="form-static valorJuros" id="juros" style="color: red;">0,00</p>
+        </div>
+        <div class="col-sm-6">
+            <label for="multa" class="text-muted">Multa:</label>
+
+            <p class="form-static valorMulta" id="multa" style="color: red;">0,00</p>
         </div>
     </div>
 </div>
@@ -160,11 +170,11 @@
 </html>
 <script>
     $(document).ready(function () {
-        var $contexto      = $('#contexto'),
-            $valorContexto = $('#valorContexto'),
-            multa          = 0,
-            valor          = 0,
-            juros          = 0;
+        var $contexto = $('#contexto'),
+                $valorContexto = $('#valorContexto'),
+                multa = 0,
+                valor = 0,
+                juros = 0;
 
         $contexto.select2({
             ajax: {
@@ -216,7 +226,7 @@
             valor = $(this).select2('data')[0]['valor'];
         });
 
-        this.formatNumber = function (number, dec, dsep, tsep) {
+        function formatNumber(number, dec, dsep, tsep) {
             if (isNaN(number) || number == null) {
                 return '';
             }
@@ -234,23 +244,28 @@
             return fnums.replace(/(\d)(?=(?:\d{3})+$)/g, '$1' + tsep) + decimals;
         };
 
-        this.formatarMoeda = function (valor) {
+        function formatarMoeda(valor) {
             if (!valor && valor !== 0) {
                 return '-';
             }
 
             valor = parseFloat(valor) || 0;
-            valor = __versaShared.formatNumber(valor, 2, ',', '.');
+            valor = formatNumber(valor, 2, ',', '.');
             return valor;
         };
 
         $('#tempoContexto, .unidade').on('change', function () {
-            var dias    = $('#tempoContexto').val(),
-                unidade = $('.unidade').val();
+            var dias = $('#tempoContexto').val(),
+                    unidade = $('.unidade:checked').val();
 
-            if(dias > 0 && unidade > 0){
+            if (dias > 0) {
                 var quantidade = dias * unidade;
-                if(juros > 0)
+                var jurosCalc = (juros * valor) / 100;
+                var multaCalc = (multa * valor) / 100;
+                var acrescimo = jurosCalc + multaCalc;
+                $('.valorFinal').html(formatarMoeda(valor + (acrescimo * quantidade)));
+                $('.valorJuros').html(formatarMoeda(jurosCalc * quantidade));
+                $('.valorMulta').html(formatarMoeda(multaCalc * quantidade));
             }
         });
     });
