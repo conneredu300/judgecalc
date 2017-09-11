@@ -29,13 +29,20 @@
         }
 
         .full-height {
-            height: 100vh;
+            height: 80vh;
         }
 
         .flex-center {
             align-items: center;
             display: flex;
             justify-content: center;
+        }
+
+        .flex-right {
+            align-items: right;
+            display: flex;
+            justify-content: right;
+            left: 930px;
         }
 
         .position-ref {
@@ -70,27 +77,30 @@
             margin-bottom: 30px;
         }
 
-        .form-control {
-            display: block;
-            width: 100%;
-            padding: .5rem .75rem;
-            font-size: 1rem;
-            line-height: 1.25;
-            color: #2b2e35;
-            background-color: #fff;
-            background-image: none;
-            background-clip: padding-box;
-            border: 1px solid rgba(0, 0, 0, .15);
-            border-radius: .25rem;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            font-weight: 600;
-        }
-
-        label {
-            color: #000000;
+        label, select {
+            color: #000000 !important;
             font-family: 'Raleway', sans-serif;
             font-weight: 800;
         }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #ff7127;
+            line-height: 28px;
+            font-weight: 700;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #fb640c;
+            color: white;
+            font-weight: 700;
+        }
+
+        .form-control, input {
+            background-color: #fdfffe;
+            color: #ff7127;
+            font-weight: 700;
+        }
+
     </style>
 </head>
 <body>
@@ -107,47 +117,141 @@
     @endif
 
     <div class="content">
-        <div class="title m-b-md">
-            <input type="hidden" id="multaContexto">
-            <input type="hidden" id="jurosContexto">
-        </div>
+        <input type="hidden" id="multaContexto">
+        <input type="hidden" id="jurosContexto">
 
-        <form class="form-inline">
+        <div class="title m-b-md">
+            Resultado: <p class="form-static valorFinal">0,00</p>
+        </div>
+    </div>
+</div>
+<div class="row col-sm-12">
+    <div class="col-sm-4">
+        <div class="form-group">
             <label for="contexto">Contexto</label>
-            <select class="form-control" id="contexto" name="contexto">
-                <?php
-                foreach (\App\Contexto::all() as $key => $contexto) {
-                    echo "<option value='$contexto->id'><strong>$contexto->descricao</strong></option>";
-                }
-                ?>
-            </select>
-            <input id="valorContexto">
-        </form>
+            <select id="contexto" class="form-control"></select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="valorContexto">Valor</label>
+            <select id="valorContexto" class="form-control"></select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="tempoContexto">Tempo</label>
+            <input id="tempoContexto" class="form-control">
+        </div>
+    </div>
+</div>
+<div class="row col-sm-12 flex-right">
+    <div class="radio">
+        <label><input class="unidade" type="radio" name="unidadeTempo" checked value=1>Dias&nbsp;</label>
+    </div>
+    <div class="radio">
+        <label><input class="unidade" type="radio" name="unidadeTempo" value=30>Mêses&nbsp;</label>
+    </div>
+    <div class="radio">
+        <label><input class="unidade" type="radio" name="unidadeTempo" value=365>Anos&nbsp;</label>
     </div>
 </div>
 </body>
 </html>
 <script>
     $(document).ready(function () {
-        var $valorContexto = $('#valorContexto');
+        var $contexto      = $('#contexto'),
+            $valorContexto = $('#valorContexto'),
+            multa          = 0,
+            valor          = 0,
+            juros          = 0;
 
-        $('#contexto').on('change', function () {
-            var id = $(this).val();
-            var url = '{{ route('valoresPorContextoId') }}';
-
-            $.ajax({
-                url: url,
+        $contexto.select2({
+            ajax: {
+                url: '{{ route("listagemContextos") }}',
                 dataType: 'json',
-                data: {id: id},
-                success: function (data) {
-                    for (var row in data) {
-                        data[row]['text'] = data[row]['valor'];
-                    }
+                processResults: function (data) {
+                    var results = [];
+                    $.each(data, function (index, el) {
+                        results.push({
+                            id: el.id,
+                            text: el.descricao
+                        });
+                    });
 
-                    $valorContexto.select2({data: data});
+                    return {
+                        results: results
+                    };
+                }
+            }
+        }).on('change', function () {
+            $valorContexto.select2({
+                ajax: {
+                    url: '{{ route("valoresPorContextoId") }}',
+                    data: {id: $(this).val()},
+                    dataType: 'json',
+                    processResults: function (data) {
+                        var results = [];
+                        $.each(data, function (index, el) {
+                            results.push({
+                                id: el.id,
+                                text: el.valor,
+                                multa: el.multa,
+                                juros: el.juros,
+                                valor: el.valor
+                            });
+                        });
+
+                        return {
+                            results: results
+                        };
+                    }
                 }
             });
         });
 
+        $valorContexto.on('change', function (e) {
+            juros = $(this).select2('data')[0]['juros'];
+            multa = $(this).select2('data')[0]['multa'];
+            valor = $(this).select2('data')[0]['valor'];
+        });
+
+        this.formatNumber = function (number, dec, dsep, tsep) {
+            if (isNaN(number) || number == null) {
+                return '';
+            }
+
+            dec = dec || 2;
+            dsep = dsep || '.';
+            tsep = tsep || '';
+
+            var newNumber = parseFloat(number).toFixed(~~dec);
+
+            var parts = newNumber.split('.');
+            var fnums = parts[0];
+            var decimals = parts[1] ? (dsep || '.') + parts[1] : '';
+
+            return fnums.replace(/(\d)(?=(?:\d{3})+$)/g, '$1' + tsep) + decimals;
+        };
+
+        this.formatarMoeda = function (valor) {
+            if (!valor && valor !== 0) {
+                return '-';
+            }
+
+            valor = parseFloat(valor) || 0;
+            valor = __versaShared.formatNumber(valor, 2, ',', '.');
+            return valor;
+        };
+
+        $('#tempoContexto, .unidade').on('change', function () {
+            var dias    = $('#tempoContexto').val(),
+                unidade = $('.unidade').val();
+
+            if(dias > 0 && unidade > 0){
+                var quantidade = dias * unidade;
+                if(juros > 0)
+            }
+        });
     });
 </script>

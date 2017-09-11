@@ -38,3 +38,5 @@ Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor')->
 
 
 Route::get('/listar-valores', 'ValoresController@Valores')->name('valoresPorContextoId');
+
+Route::get('/listar-contextos', 'ContextoController@Contextos')->name('listagemContextos');

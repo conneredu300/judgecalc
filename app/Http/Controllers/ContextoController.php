@@ -107,4 +107,11 @@ class ContextoController extends Controller
 
         return redirect()->route('listar-valores');
     }
+
+    public function contextos()
+    {
+        $valores = contexto::all();
+
+        return $valores->toJson();
+    }
 }
