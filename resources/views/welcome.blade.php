@@ -15,13 +15,13 @@
 
 
     <link href="{{ asset('select2/css/select2.min.css') }}" rel="stylesheet" type="text/css">
-    <script src="{{ asset('select2/js/select2.min.js') }}"></script>
+    <script src="{{ asset('select2/js/select2.full.js') }}"></script>
 
     <!-- Styles -->
     <style>
         html, body {
             background-color: rgba(243, 242, 244, 0.78);
-            color: #636b6f;
+            color: #000000;
             font-family: 'Raleway', sans-serif;
             font-weight: 100;
             height: 100vh;
@@ -57,7 +57,7 @@
         }
 
         .links > a {
-            color: #636b6f;
+            color: #000000;
             padding: 0 25px;
             font-size: 12px;
             font-weight: 600;
@@ -121,7 +121,7 @@
                 }
                 ?>
             </select>
-            <select class="form-control" id="valorContexto" name="valorContexto"></select>
+            <input id="valorContexto">
         </form>
     </div>
 </div>
@@ -129,6 +129,8 @@
 </html>
 <script>
     $(document).ready(function () {
+        var $valorContexto = $('#valorContexto');
+
         $('#contexto').on('change', function () {
             var id = $(this).val();
             var url = '{{ route('valoresPorContextoId') }}';
@@ -137,12 +139,15 @@
                 url: url,
                 dataType: 'json',
                 data: {id: id},
-                success: function(data){
-                    for(var row in data){
-
+                success: function (data) {
+                    for (var row in data) {
+                        data[row]['text'] = data[row]['valor'];
                     }
+
+                    $valorContexto.select2({data: data});
                 }
             });
         });
+
     });
 </script>
