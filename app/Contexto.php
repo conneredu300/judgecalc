@@ -8,7 +8,7 @@ class Contexto extends Model
 {
     public function valores()
     {
-        return $this->hasMany('App\Valores');
+        return $this->hasOne('App\Valores');
     }
 
     public $rules = [

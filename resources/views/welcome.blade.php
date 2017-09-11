@@ -82,6 +82,12 @@
                 transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                 font-weight: 600;
             }
+
+            label{
+                color: #000000;
+                font-family: 'Raleway', sans-serif;
+                font-weight: 800;
+            }
         </style>
     </head>
     <body>
@@ -99,32 +105,35 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Escolha um Contexto
-                    <select class="form-control" id="valorContexto" name="valorContexto">
+                    <input type="hidden" id="multaContexto">
+                    <input type="hidden" id="jurosContexto">
+                </div>
+
+                <form class="form-inline">
+                    <label for="contexto">Contexto</label>
+                    <select class="form-control" id="contexto" name="contexto">
                         <?php
                         foreach (\App\Contexto::all() as $key => $contexto) {
                             echo "<option value='$contexto->id'><strong>$contexto->descricao</strong></option>";
                         }
                         ?>
                     </select>
-
-                    <div class="form-group" id="valor" style="display: none">
-                        Valor
-                        <input type="text" class="form-control" id="pwd">
-                    </div>
-                </div>
-
-                <div class="links">
-
-                </div>
+                    <select class="form-control" id="valorContexto" name="valorContexto">
+                        <?php
+                        foreach (\App\Valores::all() as $key => $valores) {
+                            echo "<option value='$valores->valor'><strong>$valores->valor</strong></option>";
+                        }
+                        ?>
+                    </select>
+                </form>
             </div>
         </div>
     </body>
 </html>
 <script>
     $(document).ready(function(){
-        $('#valorContexto').on('change',function(){
-             $('#valor').removeClass('hidden');
+        $('#contexto').on('change',function(){
+             var id = $(this).val();
         });
     });
 </script>
