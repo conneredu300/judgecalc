@@ -35,3 +35,6 @@ Route::get('/novo-valor', 'ValoresController@Create')->name('novo-valor')->middl
 Route::get('/apagar-valor/{id}', 'ValoresController@Destroy')->name('apagar-valor')->middleware('auth');
 
 Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor')->middleware('auth');
+
+
+Route::get('/listar-valores', 'ValoresController@Valores')->name('valoresPorContextoId');

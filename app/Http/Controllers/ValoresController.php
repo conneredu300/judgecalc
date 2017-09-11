@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Valores;
 use App\Contexto;
 use Illuminate\Contracts\Validation\Validator;
+use Psy\Util\Json;
 
 class ValoresController extends Controller
 {
@@ -72,7 +73,16 @@ class ValoresController extends Controller
      */
     public function show($id)
     {
-        //
+//
+    }
+
+    public function valores(Request $request)
+    {
+        $id = $request->get('id');
+
+        $valores = valores::all()->where('contexto_id', $id);
+
+        return $valores->toJson();
     }
 
     /**
