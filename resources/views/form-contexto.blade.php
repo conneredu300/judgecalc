@@ -11,7 +11,7 @@
                         {!! Form::open(['route' => 'salvar-contexto', 'class' => 'form']) !!}
 
                         <div class="form-group{{ $errors->has('contextoDescricao')? ' has-error' : '' }}">
-                            {!! Form::label('contextoDescricao', 'Descrição') !!}
+                            {!! Form::label('contextoDescricao', 'Ano') !!}
                             <input type="text" class="form-control" id="contextoDescricao" name="contextoDescricao">
 
                             @if($errors->has('contextoDescricao'))
@@ -19,7 +19,7 @@
                                 <strong>{{ $errors->first('contextoDescricao') }}</strong>
                                     </span>
                             @else
-                                <small id="emailHelp" class="form-text text-muted">Tipo de contexto</small>
+                                <small id="emailHelp" class="form-text text-muted">Ano referência</small>
                             @endif
                         </div>
 

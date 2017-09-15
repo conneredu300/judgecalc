@@ -17,8 +17,7 @@
                             <thead>
                             <tr>
                                 <th>Valor Líquido</th>
-                                <th>Multas</th>
-                                <th>Júros</th>
+                                <th>Mês</th>
                                 <th>Contexto relacionado</th>
                                 <th>Ações</th>
                             </tr>
@@ -28,8 +27,7 @@
                             @foreach($valores as $valor)
                                 <tr>
                                     <td>{{ $valor->valor }}</td>
-                                    <td>{{ $valor->multa }}</td>
-                                    <td>{{ $valor->juros }}</td>
+                                    <td>{{ $valor->mes }}</td>
                                     <td>{{ $valor->contexto->descricao }}</td>
                                     <td><a href="{{ route('apagar-valor', $valor->id) }}" class="btn btn-danger">
                                             <strong>Excluir</strong>

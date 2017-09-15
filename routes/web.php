@@ -37,6 +37,6 @@ Route::get('/apagar-valor/{id}', 'ValoresController@Destroy')->name('apagar-valo
 Route::post('/inserir-valor', 'ValoresController@Store')->name('salvar-valor')->middleware('auth');
 
 
-Route::get('/listar-valores', 'ValoresController@Valores')->name('valoresPorContextoId');
+Route::get('/listar-valores', 'ValoresController@RetornaArrayValoresPorData')->name('retornarValoresPorData');
 
 Route::get('/listar-contextos', 'ContextoController@Contextos')->name('listagemContextos');

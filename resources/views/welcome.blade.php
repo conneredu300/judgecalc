@@ -30,7 +30,7 @@
         }
 
         .full-height {
-            height: 80vh;
+            height: 60vh;
         }
 
         .flex-center {
@@ -85,20 +85,20 @@
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #ff7127;
+            color: #ae0911;
             line-height: 28px;
             font-weight: 700;
         }
 
         .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: #fb640c;
+            background-color: #ae0911;
             color: white;
             font-weight: 700;
         }
 
         .form-control, input {
             background-color: #fdfffe;
-            color: #ff7127;
+            color: #ae0911;
             font-weight: 700;
         }
 
@@ -135,48 +135,61 @@
         </div>
     </div>
 </div>
-<div class="row col-sm-12">
-    <div class="col-sm-4">
+<div class="col-sm-12 flex-center text-center">
+    <div class="col-sm-2">
         <div class="form-group">
-            <label for="contexto">Contexto</label>
-            <select id="contexto" class="form-control"></select>
+            <label for="contextoAnoInicial">Ano de início</label>
+            <select id="contextoAnoInicial" class="form-control"></select>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="form-group">
-            <label for="valorContexto">Valor</label>
-            <select id="valorContexto" class="form-control"></select>
+            <label for="contextoMesInicial">Mês de início</label>
+            <select id="contextoMesInicial" class="form-control"></select>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-2">
         <div class="form-group">
-            <label for="tempoContexto">Tempo</label>
-            <input id="tempoContexto" class="form-control">
+            <label for="contextoAnoFinal">Ano limite</label>
+            <select id="contextoAnoFinal" class="form-control"></select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label for="contextoMesFinal">Mês limite</label>
+            <select id="contextoMesFinal" class="form-control"></select>
         </div>
     </div>
 </div>
-<div class="row col-sm-12 flex-right">
-    <div class="radio">
-        <label><input class="unidade" type="radio" name="unidadeTempo" checked value=1>Dias&nbsp;</label>
+<div class="col-sm-12 flex-center text-center">
+    <div class="col-sm-2">
+        <div class="form-group">
+            <label for="multa">Multa</label>
+            <input name="multa" class="form-control" id="multa">
+        </div>
     </div>
-    <div class="radio">
-        <label><input class="unidade" type="radio" name="unidadeTempo" value=30>Mêses&nbsp;</label>
+    <div class="col-sm-2">
+        <div class="form-group">
+            <label for="juros">Juros</label>
+            <input name="juros" class="form-control" id="juros">
+        </div>
     </div>
-    <div class="radio">
-        <label><input class="unidade" type="radio" name="unidadeTempo" value=365>Anos&nbsp;</label>
-    </div>
+</div>
+<div class="col-sm-12 text-center">
+    <button class="btn btn-info btnCalcular" style="text-align: center"><strong>Calcular</strong></button>
 </div>
 </body>
 </html>
 <script>
     $(document).ready(function () {
-        var $contexto = $('#contexto'),
-                $valorContexto = $('#valorContexto'),
-                multa = 0,
-                valor = 0,
-                juros = 0;
+        var $anoInicial = $('#contextoAnoInicial'),
+                $anoFinal = $('#contextoAnoFinal'),
+                $mesInicial = $('#contextoMesInicial'),
+                $mesFinal = $('#contextoMesInicial'),
+                $juros = $('#juros'),
+                $multa = $('#multa');
 
-        $contexto.select2({
+        $('#contextoAnoInicial,#contextoAnoFinal').select2({
             ajax: {
                 url: '{{ route("listagemContextos") }}',
                 dataType: 'json',
@@ -194,35 +207,28 @@
                     };
                 }
             }
-        }).on('change', function () {
-            $valorContexto.select2({
-                ajax: {
-                    url: '{{ route("valoresPorContextoId") }}',
-                    data: {id: $(this).val()},
-                    dataType: 'json',
-                    processResults: function (data) {
-                        var results = [];
-                        $.each(data, function (index, el) {
-                            results.push({
-                                id: el.id,
-                                text: el.valor,
-                                multa: el.multa,
-                                juros: el.juros,
-                                valor: el.valor
-                            });
-                        });
-
-                        return {
-                            results: results
-                        };
-                    }
-                }
-            });
         });
 
+        $('#contextoMesInicial,#contextoMesFinal').select2({
+            data: [
+                {'id': 1, text: 'Janeiro'},
+                {'id': 1, text: 'Fevereiro'},
+                {'id': 1, text: 'Março'},
+                {'id': 1, text: 'Abril'},
+                {'id': 1, text: 'Maio'},
+                {'id': 1, text: 'Junho'},
+                {'id': 1, text: 'Julho'},
+                {'id': 1, text: 'Agosto'},
+                {'id': 1, text: 'Setembro'},
+                {'id': 1, text: 'Outubro'},
+                {'id': 1, text: 'Novembro'},
+                {'id': 1, text: 'Dezembro'}
+            ]
+        });
+
+
+
         $valorContexto.on('change', function (e) {
-            juros = $(this).select2('data')[0]['juros'];
-            multa = $(this).select2('data')[0]['multa'];
             valor = $(this).select2('data')[0]['valor'];
         });
 
@@ -260,12 +266,7 @@
 
             if (dias > 0) {
                 var quantidade = dias * unidade;
-                var jurosCalc = (juros * valor) / 100;
-                var multaCalc = (multa * valor) / 100;
-                var acrescimo = jurosCalc + multaCalc;
-                $('.valorFinal').html(formatarMoeda(valor + (acrescimo * quantidade)));
-                $('.valorJuros').html(formatarMoeda(jurosCalc * quantidade));
-                $('.valorMulta').html(formatarMoeda(multaCalc * quantidade));
+                $('.valorFinal').html(formatarMoeda(valor * quantidade));
             }
         });
     });

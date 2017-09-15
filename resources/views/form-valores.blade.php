@@ -8,10 +8,10 @@
                     <div class="panel-heading">Novo Valor</div>
 
                     <div class="panel-body">
-                        {!! Form::open(['route' => 'salvar-valor', 'class' => 'form']) !!}
+                        {!! Form::open(['route' => 'salvar-valor', 'class' => 'form', 'enctype' => 'multipart/']) !!}
 
                         <div class="form-group{{ $errors->has('valorContexto') ? ' has-error' : '' }}">
-                            <label for="valorContexto">Contextos</label>
+                            <label for="valorContexto">Ano</label>
                             <select class="form-control" id="valorContexto" name="valorContexto">
                                 <?php
                                 foreach ($contextos as $key => $contexto) {
@@ -26,42 +26,30 @@
                             @endif
                         </div>
 
-                        <div class="form-group{{ $errors->has('valor') ? ' has-error' : '' }}">
-                            {!! Form::label('valor', 'Valor') !!}
-                            <input type="text" class="form-control" id="valor" name="valor" value="{{ old('valor') }}">
-                            @if ($errors->has('valor'))
-                                <span class="help-block">
+                        <div class="col-sm-12">
+                            @foreach(range(1,12) as $mes)
+                                <div class="col-sm-2">
+                                    <div class="form-group{{ $errors->has('valor') ? ' has-error' : '' }}">
+                                        <input type="hidden" name="mes[]" value="{{$mes}}">
+                                        <input type="text" class="form-control" id="valor{{$mes}}" name="valor[]"
+                                               value="{{ old('valor') }}">
+                                        @if ($errors->has('valor'))
+                                            <span class="help-block">
                                         <strong>{{ $errors->first('valor') }}</strong>
                                     </span>
-                            @else
-                                <small id="emailHelp" class="form-text text-muted">Valor relativo ao contexto</small>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('multa') ? ' has-error' : '' }}">
-                            {!! Form::label('multa', 'Multa') !!}
-                            <input type="text" class="form-control" id="multa" name="multa" value="{{ old('multa') }}">
-
-                            @if ($errors->has('multa'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('multa') }}</strong>
-                                    </span>
-                            @else
-                                <small id="emailHelp" class="form-text text-muted">Valor relativo a multa</small>
-                            @endif
-                        </div>
-
-                        <div class="form-group{{ $errors->has('juros') ? ' has-error' : '' }}">
-                            {!! Form::label('juros', 'Juros') !!}
-                            <input type="text" class="form-control" id="juros" name="juros" value="{{ old('juros') }}">
-
-                            @if ($errors->has('juros'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('juros') }}</strong>
-                                    </span>
-                            @else
-                                <small id="emailHelp" class="form-text text-muted">Valor relativo a juros</small>
-                            @endif
+                                        @else
+                                            <small id="emailHelp" class="form-text text-muted">
+                                                <?php
+                                                setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+                                                date_default_timezone_set('America/Sao_Paulo');
+                                                $objData = Datetime::createFromFormat('!m', $mes);
+                                                echo strftime('%B',strtotime($objData->format('y-m-d')));
+                                                ?>
+                                            </small>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
                         <button class="btn btn-success" type="submit">Salvar</button>

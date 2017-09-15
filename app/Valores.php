@@ -11,18 +11,27 @@ class Valores extends Model
         return $this->belongsTo('App\Contexto');
     }
 
-    public $rules = [
-        'valor' => 'required|numeric',
-        'multa' => 'numeric',
-        'juros' => 'numeric',
-        'valorContexto' => 'required|numeric'
-    ];
+    public function retornaRegras()
+    {
+        $array['valorContexto'] = 'required|numeric';
 
-    public $messages = [
-        'valorContexto.required' => 'Campo "Contexto" é obrigatório!',
-        'valor.required' => 'Campo "Valor" é obrigatório!',
-        'valor.numeric' => 'Campo "Valor" só aceita números',
-        'multa.numeric' => 'Campo "Multa" só aceita números',
-        'juros.numeric' => 'Campo "Juros" só aceita números'
-    ];
+        foreach(range(1,12) as $mes){
+            $key = "valor$mes";
+            $array[$key] = 'required|numeric';
+        }
+
+        return $array;
+    }
+
+    public function retornaMessagens()
+    {
+        $array['valorContexto'] = 'Campo obrigatório';
+
+        foreach(range(1,12) as $mes){
+            $key = "valor$mes";
+            $array[$key] = 'Campo obrigatório';
+        }
+
+        return $array;
+    }
 }

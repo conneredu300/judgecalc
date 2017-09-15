@@ -16,9 +16,8 @@ class CreateValoresTable extends Migration
         Schema::create('valores', function (Blueprint $table) {
             $table->increments('id');
             $table->float('valor');
+            $table->integer('mes');
             $table->integer('contexto_id')->unsigned()->index();
-            $table->float('juros')->nullable();
-            $table->float('multa')->nullable();
 
             $table->foreign('contexto_id')
                 ->references('id')->on('contextos')

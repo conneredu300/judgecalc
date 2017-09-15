@@ -42,25 +42,21 @@ class ValoresController extends Controller
      */
     public function store(Request $request)
     {
-        $valores = new Valores();
-
         $dados = $request->all();
 
-        $validator = validator($dados, $valores->rules, $valores->messages);
+        foreach ($dados['valor'] as $key => $valor) {
+            if ($valor) {
+                $valores = new Valores();
 
-        if ($validator->fails()) {
-            return redirect()->route('novo-valor')->withErrors($validator)->withInput();
+                $valores->valor = $valor;
+
+                $valores->contexto_id = $request->get('valorContexto');
+
+                $valores->mes = $dados['mes'][$key];
+
+                $valores->save();
+            }
         }
-
-        $valores->valor = $request->get('valor');
-
-        $valores->contexto_id = $request->get('valorContexto');
-
-        $valores->multa = $request->get('multa');
-
-        $valores->juros = $request->get('juros');
-
-        $valores->save();
 
         return redirect()->route('listar-valores');
     }
@@ -126,6 +122,10 @@ class ValoresController extends Controller
         }
 
         return redirect()->route('listar-valores');
+    }
+
+    public function retornaArrayValoresPorData(Request $request){
+
     }
 
 }
